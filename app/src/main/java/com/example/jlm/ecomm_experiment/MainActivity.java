@@ -284,5 +284,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    //for text commit
 }

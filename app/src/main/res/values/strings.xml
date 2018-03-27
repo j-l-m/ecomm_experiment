@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">ecomm_experiment</string>
+    <string name="title_activity_exp_info">ExpInfo</string>
+    <string name="exp_desc"><![CDATA[
+"Thank you for taking part in this experiment.\n\nYou need to be connected to the internet via public wifi or mobile data.\n
+Please use the app exactly once a day for the duration of the experiment\n
+The app presents to you a joke of the day.\n
+You can choose to like or dislike a joke, or, simply exit without choosing either.\n
+Remember your choice is being logged but you will remain anonymous in your analysis.\n\n
+Have a good day"
+    ]]>
+    </string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>

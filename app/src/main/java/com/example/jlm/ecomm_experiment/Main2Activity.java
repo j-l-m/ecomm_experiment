@@ -47,6 +47,9 @@ public class Main2Activity extends AppCompatActivity {
     }
 */
 
+
+// NOTE: REMOVE THE TOASTS THAT LOAD WITH THE APP
+
     public ArrayList<String> jokes;
     public TextView txtview;
     public SharedPreferences prefs;
@@ -218,6 +221,11 @@ public class Main2Activity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+        homeIntent.addCategory(Intent.CATEGORY_HOME);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(homeIntent);
+
     }
 
     public void exitClick(View view) throws IOException {
@@ -227,6 +235,11 @@ public class Main2Activity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+        homeIntent.addCategory(Intent.CATEGORY_HOME);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(homeIntent);
 
     }
 
@@ -243,7 +256,6 @@ public class Main2Activity extends AppCompatActivity {
         String net_status = chkStatus();
         createFileOnDevice(true, joke_log+","+date_str+","+convert+","+net_status+" \n");
         Toast.makeText(Main2Activity.this,"Response Recorded", Toast.LENGTH_LONG).show();
-        finish();
     }
 
 

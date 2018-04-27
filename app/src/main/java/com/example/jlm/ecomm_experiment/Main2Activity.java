@@ -28,27 +28,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Main2Activity extends AppCompatActivity {
-/*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-    }
-*/
 
 
-// NOTE: REMOVE THE TOASTS THAT LOAD WITH THE APP
+// NOTE: REMOVE THE TOASTS THAT LOAD WITH THE APP - causing overlay error
 
     public ArrayList<String> jokes;
     public TextView txtview;
@@ -57,6 +39,7 @@ public class Main2Activity extends AppCompatActivity {
     //private boolean conversion = false;
     private int connected = 0;
     private static final int PERMISSION_REQUEST_CODE = 1;
+    private boolean issameday = false;
 
 
     @Override
@@ -135,7 +118,7 @@ public class Main2Activity extends AppCompatActivity {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         String joke_log = this.prefs.getString("jokenum", null);
         String date_log = this.prefs.getString("date", null);
-        Toast.makeText(Main2Activity.this,date_log, Toast.LENGTH_LONG).show();
+        //Toast.makeText(Main2Activity.this,date_log, Toast.LENGTH_LONG).show();
         SharedPreferences.Editor editor  = this.prefs.edit();
         if (joke_log == null || date_log == null){
             joke_log = "0";
@@ -143,7 +126,7 @@ public class Main2Activity extends AppCompatActivity {
             editor.putString("jokenum", joke_log);
             editor.putString("date",date_log);
             editor.commit();
-            Toast.makeText(Main2Activity.this,joke_log+" "+date_log, Toast.LENGTH_LONG).show();
+            //Toast.makeText(Main2Activity.this,joke_log+" "+date_log, Toast.LENGTH_LONG).show();
         }
         else{
             int joke_num = Integer.parseInt(joke_log);
@@ -156,10 +139,12 @@ public class Main2Activity extends AppCompatActivity {
                 editor.putString("jokenum", joke_num+"");
                 editor.putString("date", date_val+"");
                 editor.commit();
-                Toast.makeText(Main2Activity.this,"Diff day" + joke_num+" "+date_log, Toast.LENGTH_LONG).show();
+                //Toast.makeText(Main2Activity.this,"Diff day" + joke_num+" "+date_log, Toast.LENGTH_LONG).show();
+                issameday = false;
             }
             else{
-                Toast.makeText(Main2Activity.this,"Same day: "+joke_log+" "+date_log, Toast.LENGTH_LONG).show();
+                //Toast.makeText(Main2Activity.this,"Same day: "+joke_log+" "+date_log, Toast.LENGTH_LONG).show();
+                issameday = logFileExists();
             }
 
         }
@@ -171,7 +156,7 @@ public class Main2Activity extends AppCompatActivity {
         this.txtview = (TextView) findViewById(R.id.joke_view2);
         int joke_num = Integer.parseInt(this.prefs.getString("jokenum", null));
         joke_num = (joke_num >= 13)? 13 : joke_num;
-        Toast.makeText(Main2Activity.this,"Joke Num: "+joke_num, Toast.LENGTH_LONG).show();
+        //Toast.makeText(Main2Activity.this,"Joke Num: "+joke_num, Toast.LENGTH_LONG).show();
         this.txtview.setText(jokes.get(joke_num).toString());
     }
 
@@ -247,15 +232,27 @@ public class Main2Activity extends AppCompatActivity {
 
 
     public void logConversion(boolean convert) throws IOException {
+
+        if(issameday){
+            Toast.makeText(Main2Activity.this,"You already: Used the app today, thanks", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String net_status = chkStatus();
+        if (net_status == "no_network"){
+            Toast.makeText(Main2Activity.this,"No network: No wifi/mobile data connection detected", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         String joke_log = this.prefs.getString("jokenum", null);
         String date_log = this.prefs.getString("date", null);
         Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         // String date_str = (String.valueOf(d.getHours()+":"+ d.getMinutes()));
         String date_str = sdf.format(d);
-        String net_status = chkStatus();
+
         createFileOnDevice(true, joke_log+","+date_str+","+convert+","+net_status+" \n");
-        Toast.makeText(Main2Activity.this,"Response Recorded", Toast.LENGTH_LONG).show();
+        Toast.makeText(Main2Activity.this,"Response noted: THANKS", Toast.LENGTH_LONG).show();
     }
 
 
@@ -319,13 +316,13 @@ public class Main2Activity extends AppCompatActivity {
         final android.net.NetworkInfo wifi = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         final android.net.NetworkInfo mobile = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
         if (wifi.isConnectedOrConnecting ()) {
-            Toast.makeText(this, "Wifi", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Wifi", Toast.LENGTH_LONG).show();
             return  "wifi";
         } else if (mobile.isConnectedOrConnecting ()) {
-            Toast.makeText(this, "Mobile 3G ", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Mobile 3G ", Toast.LENGTH_LONG).show();
             return "mobile_data";
         } else {
-            Toast.makeText(this, "No Network ", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "No Network ", Toast.LENGTH_LONG).show();
             return "no_network";
         }
     }
